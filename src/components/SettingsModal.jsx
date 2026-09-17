@@ -33,14 +33,14 @@ export default function SettingsModal({
             <input
               type="range"
               min="10"
-              max="24"
+              max="50"
               value={settings.fontSize}
               onChange={(e) => setSettings({...settings, fontSize: e.target.value})}
               className="w-full accent-blue-500"
             />
             <div className="flex justify-between mt-1">
               <span className={`text-xs ${currentTheme.textSecondary}`}>10px</span>
-              <span className={`text-xs ${currentTheme.textSecondary}`}>24px</span>
+              <span className={`text-xs ${currentTheme.textSecondary}`}>50px</span>
             </div>
           </div>
 
