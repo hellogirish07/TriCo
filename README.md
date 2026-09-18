@@ -1,175 +1,118 @@
-# CodePen Mini - Online Code Editor
+# HyperCode
 
-A modern, responsive web-based code editor built with React that allows you to write HTML and CSS code with live preview functionality.
+HyperCode is a VS Code-inspired browser workspace for opening, editing, and managing real project folders directly in the browser. It combines a file explorer, tabbed editor, live preview, project save flow, and responsive layout in a single modern interface.
 
-## ✨ Features
+## ✨ Latest Updates
 
-### 🎨 **Multi-Theme Support**
-- **Dark Theme** - Professional dark interface
-- **Light Theme** - Clean light interface  
-- **Ocean Theme** - Beautiful cyan color scheme
+### VS Code-like project workspace
+- Open a real project folder from your machine
+- Browse nested files and folders in a sidebar explorer
+- Create, rename, and delete files directly from the UI
+- See the current file tree update immediately as your workspace changes
 
-### 📝 **Code Editor**
-- **HTML Editor** - Write and edit HTML code
-- **CSS Editor** - Write and edit CSS styles
-- **Tab Switching** - Easy switching between HTML and CSS
-- **Auto-save** - Your code is preserved as you type
+### File-based editor workflow
+- Each file opens in its own tab with a proper file name instead of fixed HTML/CSS/JS placeholders
+- File content updates live while you edit
+- Closing a file from the sidebar also removes the matching editor tab
+- A welcome screen appears when no project is open
 
-### 🔧 **Customizable Settings**
-- **Font Size** - Adjustable from 10px to 24px
-- **Font Family** - Choose from Monospace, Sans-serif, or Serif
-- **Auto Run** - Automatically show preview as you type
-- **Theme Selection** - Switch between different color schemes
+### Save and project management
+- Save changes back to the opened folder when supported by the browser
+- Keep the project in sync with your local workspace
+- Close folder button clears the active project cleanly
+- Refresh and quit prompts help prevent accidental loss of work
 
-### 👁️ **Live Preview**
-- **Real-time Preview** - See your changes instantly
-- **Responsive Design** - Preview adapts to different screen sizes
-- **Full HTML Output** - Complete HTML document generation
+### Modern editor experience
+- CodeMirror-based editing with Dracula theme
+- Syntax highlighting for HTML, CSS, and JavaScript
+- Adjustable editor settings for font size, family, and theme
+- Built-in live preview panel for rapid iteration
 
-### 💾 **Export Functionality**
-- **Download HTML** - Export your code as a complete HTML file
-- **Ready to Use** - Downloaded file includes all CSS and HTML
+### Better UX and responsiveness
+- Sidebar toggle placed before the logo and app branding
+- Clean, IDE-like layout with a more polished welcome experience
+- Responsive layout optimized for desktop, tablet, and mobile use
+- SweetAlert2 dialogs replace browser alerts for more consistent confirmation flows
+
+### Tooling and stack
+- React and Vite updated to the latest compatible versions
+- Modern frontend build setup with Vite 8
+- Fast local development and production build workflow
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
+- Node.js 18+
+- npm
 
-### Installation
+### Install
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd code-editor
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-3. **Start the development server**
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-4. **Open your browser**
-   Navigate to `http://localhost:5173` (or the port shown in your terminal)
-
-## 🏗️ Project Structure
-
+```bash
+npm install
 ```
+
+### Run locally
+
+```bash
+npm run dev
+```
+
+Then open the local URL shown in the terminal, usually http://localhost:5173.
+
+### Build for production
+
+```bash
+npm run build
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
+## 🏗️ App Flow
+
+1. Open a project folder from your machine.
+2. Browse files in the sidebar explorer.
+3. Edit files in the tabbed CodeMirror editor.
+4. Run the preview to check the rendered output.
+5. Save updates back to the folder when needed.
+
+## 🧩 Tech Stack
+
+- React
+- Vite
+- CodeMirror
+- Dracula theme
+- Lucide icons
+- SweetAlert2
+
+## 📁 Project Structure
+
+```bash
 src/
+├── App.jsx
+├── App.css
+├── index.css
+├── main.jsx
 ├── components/
-│   ├── Header.jsx          # Header with logo and action buttons
-│   ├── EditorTabs.jsx      # HTML/CSS tab navigation
-│   ├── CodeEditor.jsx      # Main code editing interface
-│   ├── PreviewPanel.jsx    # Live preview iframe
-│   └── SettingsModal.jsx   # Settings configuration modal
+│   ├── CodeEditor.jsx
+│   ├── EditorTabs.jsx
+│   ├── Header.jsx
+│   ├── PreviewPanel.jsx
+│   ├── SettingsModal.jsx
+│   ├── Sidebar.jsx
+│   └── SymbolPalette.jsx
 ├── constants/
-│   └── themes.js           # Theme definitions and font families
-├── App.jsx                 # Main application component
-├── main.jsx               # Application entry point
-└── index.css              # Global styles
-```
-
-## 🎯 Usage
-
-### Basic Usage
-1. **Write HTML** - Switch to the HTML tab and start coding
-2. **Add Styles** - Switch to the CSS tab and style your HTML
-3. **Preview** - Click the "Run" button to see your code in action
-4. **Customize** - Use the Settings button to adjust editor preferences
-5. **Export** - Download your complete HTML file when ready
-
-### Keyboard Shortcuts
-- **Tab** - Switch between HTML and CSS tabs
-- **Ctrl/Cmd + S** - Save your work (browser will prompt)
-- **Ctrl/Cmd + A** - Select all text in current editor
-
-### Settings Options
-- **Font Size**: Adjust text size for better readability
-- **Font Family**: Choose your preferred coding font
-- **Theme**: Switch between dark, light, and ocean themes
-- **Auto Run**: Enable to automatically show preview while typing
-
-## 🛠️ Technologies Used
-
-- **React 18** - Modern React with hooks
-- **Vite** - Fast build tool and dev server
-- **Tailwind CSS** - Utility-first CSS framework
-- **Lucide React** - Beautiful icon library
-- **JavaScript ES6+** - Modern JavaScript features
-
-## 📱 Responsive Design
-
-The editor is fully responsive and works great on:
-- **Desktop** - Full feature experience
-- **Tablet** - Optimized layout for medium screens
-- **Mobile** - Touch-friendly interface
-
-## 🎨 Theme Customization
-
-The editor supports three built-in themes:
-
-### Dark Theme
-- Deep slate background
-- Blue and purple accents
-- Easy on the eyes for long coding sessions
-
-### Light Theme  
-- Clean white background
-- Professional gray tones
-- Perfect for bright environments
-
-### Ocean Theme
-- Cyan and teal color scheme
-- Fresh, modern appearance
-- Unique visual experience
-
-## 🔧 Development
-
-### Available Scripts
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-
-### Adding New Themes
-To add a new theme, edit `src/constants/themes.js`:
-
-```javascript
-export const themes = {
-  // ... existing themes
-  yourTheme: {
-    bg: 'bg-your-bg',
-    secondary: 'bg-your-secondary',
-    border: 'border-your-border',
-    text: 'text-your-text',
-    textSecondary: 'text-your-secondary-text',
-    input: 'bg-your-input text-your-input-text',
-    accent: 'from-your-accent to-your-accent-secondary'
-  }
-};
+│   └── themes.js
+└── assets/
 ```
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is open source and available under the MIT License.
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## 📞 Support
-
-If you have any questions or need help, please open an issue on GitHub.
-
----
-
-**Happy Coding!** 🎉
+Contributions are welcome. Feel free to open an issue or submit a pull request with improvements.

@@ -27,7 +27,7 @@ export default function Header({
           <div className={`bg-gradient-to-br ${currentTheme.accent} p-2 rounded-lg`}>
             <Code className="text-white" size={20} />
           </div>
-          <h1 className={`${currentTheme.text} truncate text-lg font-bold sm:text-xl`}>CodePen Mini</h1>
+          <h1 className={`${currentTheme.text} truncate text-lg font-bold sm:text-xl`}>HyperCode</h1>
           
         </div>
         <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">

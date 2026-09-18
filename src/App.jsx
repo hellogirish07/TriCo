@@ -16,7 +16,7 @@ const initialFiles = [
     name: 'index.html',
     path: 'index.html',
     type: 'html',
-    content: '<div class="container">\n  <h1>Hello World!</h1>\n  <p>Welcome to the CodePen Mini.</p>\n</div>',
+    content: '<div class="container">\n  <h1>Hello World!</h1>\n  <p>Welcome to HyperCode.</p>\n</div>',
   },
   {
     name: 'styles.css',
@@ -40,12 +40,13 @@ const getFileType = (fileName) => {
 };
 
 const getFileName = (filePath) => filePath.split('/').pop();
-const WORKSPACE_STORAGE_KEY = 'codepen-mini-workspace';
+const WORKSPACE_STORAGE_KEY = 'hypercode-workspace';
+const LEGACY_WORKSPACE_STORAGE_KEY = 'codepen-mini-workspace';
 const supportedFilePattern = /\.(html?|css|js)$/i;
 
 const loadSavedFiles = () => {
   try {
-    const savedFiles = JSON.parse(localStorage.getItem(WORKSPACE_STORAGE_KEY) || 'null');
+    const savedFiles = JSON.parse(localStorage.getItem(WORKSPACE_STORAGE_KEY) || localStorage.getItem(LEGACY_WORKSPACE_STORAGE_KEY) || 'null');
     if (Array.isArray(savedFiles) && savedFiles.every((file) => file?.path && file?.name && file?.content !== undefined)) {
       return savedFiles;
     }
@@ -409,7 +410,7 @@ export default function App() {
                 </div>
                 <div className="mt-6 flex items-center justify-center gap-2 text-xs font-medium uppercase tracking-[0.25em] text-blue-400">
                   <Sparkles size={14} />
-                  CodePen Mini
+                  HyperCode
                 </div>
                 <h2 className={`mt-3 text-2xl font-semibold tracking-tight ${currentTheme.text}`}>Your workspace is ready</h2>
                 <p className="mx-auto mt-3 max-w-md text-sm leading-6">Open a project folder to bring your files into a focused, browser-based coding workspace.</p>
