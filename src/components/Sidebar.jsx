@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Check, ChevronDown, ChevronRight, FileCode2, Folder, FolderOpen, FolderUp, FolderX, Pencil, Plus, Trash2, UploadCloud } from 'lucide-react';
+import { Check, ChevronDown, ChevronRight, FileCode2, Folder, FolderOpen, FolderUp, FolderX, MoreVertical, Pencil, Plus, Trash2, UploadCloud } from 'lucide-react';
 
 const buildTree = (files) => {
   const root = { folders: {}, files: [] };
@@ -22,6 +22,7 @@ export default function Sidebar({ files, selectedFile, onSelectFile, onCreateFil
   const [renamingPath, setRenamingPath] = useState(null);
   const [renameValue, setRenameValue] = useState('');
   const [openFolders, setOpenFolders] = useState({});
+  const [openMenuPath, setOpenMenuPath] = useState(null);
   const tree = useMemo(() => buildTree(files), [files]);
 
   const submitNewFile = (event) => {
@@ -31,6 +32,7 @@ export default function Sidebar({ files, selectedFile, onSelectFile, onCreateFil
   };
 
   const beginRename = (file) => {
+    setOpenMenuPath(null);
     setRenamingPath(file.path);
     setRenameValue(file.name);
   };
@@ -58,7 +60,7 @@ export default function Sidebar({ files, selectedFile, onSelectFile, onCreateFil
         );
       })}
       {node.files.sort((a, b) => a.name.localeCompare(b.name)).map((file) => (
-        <div key={file.path} className={`group flex items-center gap-1 rounded px-2 py-1 text-sm ${selectedFile === file.path ? 'bg-blue-600/20 text-blue-100' : `${currentTheme.text} hover:bg-slate-800`}`} style={{ paddingLeft: `${depth * 14 + 18}px` }}>
+        <div key={file.path} className={`relative flex items-center gap-1 rounded px-2 py-1 text-sm ${selectedFile === file.path ? 'bg-blue-600/20 text-blue-100' : `${currentTheme.text} hover:bg-slate-800`}`} style={{ paddingLeft: `${depth * 14 + 18}px` }}>
           {renamingPath === file.path ? (
             <form onSubmit={(event) => submitRename(event, file)} className="flex min-w-0 flex-1 items-center gap-1">
               <input autoFocus value={renameValue} onChange={(event) => setRenameValue(event.target.value)} onKeyDown={(event) => event.key === 'Escape' && setRenamingPath(null)} className={`min-w-0 flex-1 rounded border ${currentTheme.border} ${currentTheme.input} px-1 py-0.5 text-xs outline-none`} />
@@ -70,8 +72,28 @@ export default function Sidebar({ files, selectedFile, onSelectFile, onCreateFil
                 <FileCode2 size={15} className={fileColors[file.type] || currentTheme.textSecondary} />
                 <span className="truncate">{file.name}</span>
               </button>
-              <button type="button" onClick={() => beginRename(file)} className="hidden rounded p-1 text-slate-400 hover:text-white group-hover:block" aria-label={`Rename ${file.name}`}><Pencil size={13} /></button>
-              <button type="button" onClick={() => onDeleteFile(file.path)} className="hidden rounded p-1 text-slate-400 hover:text-red-400 group-hover:block" aria-label={`Delete ${file.name}`}><Trash2 size={13} /></button>
+              <button
+                type="button"
+                onClick={() => setOpenMenuPath((currentPath) => currentPath === file.path ? null : file.path)}
+                className="rounded p-1 text-slate-400 hover:bg-slate-700 hover:text-white"
+                aria-label={`File actions for ${file.name}`}
+                aria-expanded={openMenuPath === file.path}
+                title={`File actions for ${file.name}`}
+              >
+                <MoreVertical size={15} />
+              </button>
+              {openMenuPath === file.path && (
+                <div className={`absolute right-2 top-full z-20 mt-1 min-w-32 rounded-md border ${currentTheme.border} ${currentTheme.secondary} p-1 shadow-xl`} role="menu">
+                  <button type="button" onClick={() => beginRename(file)} className={`flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs ${currentTheme.text} hover:bg-slate-700`} role="menuitem">
+                    <Pencil size={13} />
+                    Rename
+                  </button>
+                  <button type="button" onClick={() => { setOpenMenuPath(null); onDeleteFile(file.path); }} className="flex w-full items-center gap-2 rounded px-2 py-1.5 text-left text-xs text-red-300 hover:bg-red-500/10" role="menuitem">
+                    <Trash2 size={13} />
+                    Delete
+                  </button>
+                </div>
+              )}
             </>
           )}
         </div>

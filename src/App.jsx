@@ -2,13 +2,14 @@
 import { Code, FileCode2, FolderOpen, Sparkles } from 'lucide-react';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
-import { themes, fontFamilies } from './constants/themes';
+import { themes, fontFamilies, editorThemes } from './constants/themes';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import EditorTabs from './components/EditorTabs';
 import CodeEditor from './components/CodeEditor';
 import PreviewPanel from './components/PreviewPanel';
 import SettingsModal from './components/SettingsModal';
+import InfoModal from './components/InfoModal';
 import './App.css';
 
 const initialFiles = [
@@ -16,7 +17,7 @@ const initialFiles = [
     name: 'index.html',
     path: 'index.html',
     type: 'html',
-    content: '<div class="container">\n  <h1>Hello World!</h1>\n  <p>Welcome to HyperCode.</p>\n</div>',
+    content: '<div class="container">\n  <h1>Hello World!</h1>\n  <p>Welcome to TriCo.</p>\n</div>',
   },
   {
     name: 'styles.css',
@@ -40,13 +41,17 @@ const getFileType = (fileName) => {
 };
 
 const getFileName = (filePath) => filePath.split('/').pop();
-const WORKSPACE_STORAGE_KEY = 'hypercode-workspace';
-const LEGACY_WORKSPACE_STORAGE_KEY = 'codepen-mini-workspace';
+const WORKSPACE_STORAGE_KEY = 'trico-workspace';
+const LEGACY_WORKSPACE_STORAGE_KEYS = ['hypercode-workspace', 'codepen-mini-workspace'];
 const supportedFilePattern = /\.(html?|css|js)$/i;
 
 const loadSavedFiles = () => {
   try {
-    const savedFiles = JSON.parse(localStorage.getItem(WORKSPACE_STORAGE_KEY) || localStorage.getItem(LEGACY_WORKSPACE_STORAGE_KEY) || 'null');
+    const savedWorkspace = [
+      localStorage.getItem(WORKSPACE_STORAGE_KEY),
+      ...LEGACY_WORKSPACE_STORAGE_KEYS.map((key) => localStorage.getItem(key)),
+    ].find(Boolean);
+    const savedFiles = JSON.parse(savedWorkspace || 'null');
     if (Array.isArray(savedFiles) && savedFiles.every((file) => file?.path && file?.name && file?.content !== undefined)) {
       return savedFiles;
     }
@@ -57,9 +62,9 @@ const loadSavedFiles = () => {
 };
 
 const defaultContentForType = {
-  html: '<div class="container">\n  <h1>New HTML file</h1>\n  <p>Start building your page here.</p>\n</div>',
+  html: '<div class="container">\n <h1>Welcome to TriCo.</h1>\n <p>Start building your page here.</p>\n</div>',
   css: '.container {\n  padding: 1.5rem;\n  color: #111827;\n  font-family: Arial, sans-serif;\n}',
-  js: "console.log('New JS file');",
+  js: "console.log('Welcome to TriCo.');",
 };
 
 const readProjectFolder = async (directoryHandle, prefix = '') => {
@@ -79,22 +84,28 @@ const readProjectFolder = async (directoryHandle, prefix = '') => {
 export default function App() {
   const [files, setFiles] = useState(loadSavedFiles);
   const [selectedFile, setSelectedFile] = useState(() => loadSavedFiles()[0]?.path || null);
+  const [openTabs, setOpenTabs] = useState(() => loadSavedFiles().map((file) => file.path));
   const [activeTab, setActiveTab] = useState(() => loadSavedFiles()[0]?.path || null);
   const [showPreview, setShowPreview] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showInfo, setShowInfo] = useState(false);
   const [showSidebar, setShowSidebar] = useState(() => window.innerWidth >= 768);
   const projectHandleRef = useRef(null);
   const diskPathsRef = useRef([]);
+  const openProjectFolderRef = useRef(null);
 
   const [settings, setSettings] = useState({
     fontSize: '20',
     fontFamily: 'mono',
     theme: 'dark',
+    editorTheme: 'dracula',
+    wordWrap: false,
     autoRun: false,
   });
 
   const currentTheme = themes[settings.theme];
-  const currentFile = files.find((file) => file.path === selectedFile) || files[0];
+  const currentFile = files.find((file) => file.path === selectedFile) || null;
+  const openFiles = openTabs.map((path) => files.find((file) => file.path === path)).filter(Boolean);
 
   useEffect(() => {
     try {
@@ -117,6 +128,7 @@ export default function App() {
   const selectTab = (path) => {
     const file = files.find((item) => item.path === path);
     if (!file) return;
+    setOpenTabs((currentTabs) => currentTabs.includes(path) ? currentTabs : [...currentTabs, path]);
     setActiveTab(file.path);
     setSelectedFile(file.path);
   };
@@ -127,24 +139,39 @@ export default function App() {
     );
   };
 
-  const closeFile = (name) => {
+  const deleteFile = (name) => {
     setFiles((prevFiles) => {
       const nextFiles = prevFiles.filter((file) => file.path !== name);
       if (nextFiles.length === 0) {
         setSelectedFile(null);
         setActiveTab(null);
+        setOpenTabs([]);
         return [];
       }
 
-      if (selectedFile === name) {
-        const removedIndex = prevFiles.findIndex((file) => file.path === name);
-        const nextIndex = Math.min(removedIndex, nextFiles.length - 1);
-        const nextSelected = nextFiles[nextIndex];
-        setSelectedFile(nextSelected.path);
-        setActiveTab(nextSelected.path);
-      }
-
       return nextFiles;
+    });
+    setOpenTabs((currentTabs) => {
+      const nextTabs = currentTabs.filter((tabPath) => tabPath !== name);
+      if (activeTab === name) {
+        const nextPath = nextTabs[0] || null;
+        setSelectedFile(nextPath);
+        setActiveTab(nextPath);
+      }
+      return nextTabs;
+    });
+  };
+
+  const closeTab = (path) => {
+    setOpenTabs((currentTabs) => {
+      const nextTabs = currentTabs.filter((tabPath) => tabPath !== path);
+      if (activeTab === path) {
+        const closedIndex = currentTabs.indexOf(path);
+        const nextPath = nextTabs[Math.min(closedIndex, nextTabs.length - 1)] || null;
+        setActiveTab(nextPath);
+        setSelectedFile(nextPath);
+      }
+      return nextTabs;
     });
   };
 
@@ -171,6 +198,7 @@ export default function App() {
     };
 
     setFiles((prevFiles) => [...prevFiles, newFile]);
+    setOpenTabs((currentTabs) => [...currentTabs, newFile.path]);
     setSelectedFile(newFile.path);
     setActiveTab(newFile.path);
   };
@@ -178,6 +206,7 @@ export default function App() {
   const selectFile = (name) => {
     const file = files.find((item) => item.path === name);
     if (!file) return;
+    setOpenTabs((currentTabs) => currentTabs.includes(file.path) ? currentTabs : [...currentTabs, file.path]);
     setSelectedFile(file.path);
     setActiveTab(file.path);
   };
@@ -220,6 +249,9 @@ export default function App() {
 
     setSelectedFile(processed[0].path);
     setActiveTab(processed[0].path);
+    setOpenTabs(replaceWorkspace
+      ? processed.map((file) => file.path)
+      : (currentTabs) => [...new Set([...currentTabs, ...processed.map((file) => file.path)])]);
   };
 
   const handleDropFiles = async (event) => {
@@ -271,6 +303,7 @@ export default function App() {
       setFiles(projectFiles);
       setSelectedFile(projectFiles[0].path);
       setActiveTab(projectFiles[0].path);
+      setOpenTabs(projectFiles.map((file) => file.path));
     } catch (error) {
       if (error.name !== 'AbortError') {
         await Swal.fire({ title: 'Could not open folder', text: error.message, icon: 'error' });
@@ -317,13 +350,10 @@ export default function App() {
     setFiles((prevFiles) => prevFiles.map((file) => (
       file.path === path ? { ...file, name, path: nextPath, type: getFileType(name) } : file
     )));
-    if (selectedFile === path) {
-      setSelectedFile(nextPath);
-      setActiveTab(nextPath);
-    }
+    setOpenTabs((currentTabs) => currentTabs.map((tabPath) => tabPath === path ? nextPath : tabPath));
+    if (selectedFile === path) setSelectedFile(nextPath);
+    if (activeTab === path) setActiveTab(nextPath);
   };
-
-  const deleteFile = (path) => closeFile(path);
 
   const closeFolder = async () => {
     const result = await Swal.fire({
@@ -340,6 +370,7 @@ export default function App() {
     diskPathsRef.current = [];
     localStorage.setItem(WORKSPACE_STORAGE_KEY, JSON.stringify([]));
     setFiles([]);
+    setOpenTabs([]);
     setSelectedFile(null);
     setActiveTab(null);
     setShowPreview(false);
@@ -361,6 +392,39 @@ export default function App() {
     }
   };
 
+  const handleEditorFontSizeChange = (fontSize) => {
+    setSettings((currentSettings) => ({ ...currentSettings, fontSize: String(fontSize) }));
+  };
+
+  openProjectFolderRef.current = openProjectFolder;
+
+  useEffect(() => {
+    const handleShortcut = (event) => {
+      const key = event.key.toLowerCase();
+      const isCtrlOrCommand = event.ctrlKey || event.metaKey;
+
+      if (event.altKey && key === 'z') {
+        event.preventDefault();
+        setSettings((currentSettings) => ({ ...currentSettings, wordWrap: !currentSettings.wordWrap }));
+      } else if (isCtrlOrCommand && !event.altKey && key === '.') {
+        event.preventDefault();
+        setShowSettings((visible) => !visible);
+      } else if (isCtrlOrCommand && event.altKey && key === 'n') {
+        event.preventDefault();
+        setShowPreview(true);
+      } else if (isCtrlOrCommand && !event.altKey && key === 'b') {
+        event.preventDefault();
+        setShowSidebar((visible) => !visible);
+      } else if (isCtrlOrCommand && !event.altKey && key === 'o') {
+        event.preventDefault();
+        openProjectFolderRef.current?.();
+      }
+    };
+
+    window.addEventListener('keydown', handleShortcut);
+    return () => window.removeEventListener('keydown', handleShortcut);
+  }, []);
+
   return (
     <div className={`h-screen flex flex-col ${currentTheme.bg}`}>
       <Header
@@ -369,6 +433,8 @@ export default function App() {
         setShowPreview={setShowPreview}
         showSettings={showSettings}
         setShowSettings={setShowSettings}
+        showInfo={showInfo}
+        setShowInfo={setShowInfo}
         showSidebar={showSidebar}
         setShowSidebar={setShowSidebar}
         onSave={saveProject}
@@ -394,8 +460,8 @@ export default function App() {
         <div className={`flex-1 flex flex-col overflow-hidden ${currentTheme.border}`}>
           {files.length > 0 ? (
             <>
-              <EditorTabs files={files} activeTab={activeTab} setActiveTab={selectTab} currentTheme={currentTheme} />
-              <CodeEditor file={currentFile} onChange={handleCodeChange} settings={settings} currentTheme={currentTheme} fontFamilies={fontFamilies} onAutoRun={() => setShowPreview(true)} />
+              <EditorTabs files={openFiles} activeTab={activeTab} setActiveTab={selectTab} onCloseTab={closeTab} currentTheme={currentTheme} />
+              <CodeEditor file={currentFile} onChange={handleCodeChange} settings={settings} setSettings={setSettings} currentTheme={currentTheme} fontFamilies={fontFamilies} onAutoRun={() => setShowPreview(true)} onFontSizeChange={handleEditorFontSizeChange} />
             </>
           ) : (
             <div className={`relative flex flex-1 items-center justify-center overflow-hidden px-6 py-12 ${currentTheme.textSecondary}`}>
@@ -410,7 +476,7 @@ export default function App() {
                 </div>
                 <div className="mt-6 flex items-center justify-center gap-2 text-xs font-medium uppercase tracking-[0.25em] text-blue-400">
                   <Sparkles size={14} />
-                  HyperCode
+                  TriCo
                 </div>
                 <h2 className={`mt-3 text-2xl font-semibold tracking-tight ${currentTheme.text}`}>Your workspace is ready</h2>
                 <p className="mx-auto mt-3 max-w-md text-sm leading-6">Open a project folder to bring your files into a focused, browser-based coding workspace.</p>
@@ -443,6 +509,13 @@ export default function App() {
           currentTheme={currentTheme}
           fontFamilies={fontFamilies}
           themes={themes}
+          editorThemes={editorThemes}
+        />
+
+        <InfoModal
+          showInfo={showInfo}
+          setShowInfo={setShowInfo}
+          currentTheme={currentTheme}
         />
       </div>
     </div>

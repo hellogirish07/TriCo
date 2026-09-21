@@ -1,4 +1,4 @@
-import { Code, Play, Settings, Menu, Save } from 'lucide-react';
+import { Code, Info, Play, Settings, Menu, Save } from 'lucide-react';
 
 export default function Header({ 
   currentTheme, 
@@ -6,6 +6,7 @@ export default function Header({
   setShowPreview, 
   showSettings, 
   setShowSettings,
+  setShowInfo,
   showSidebar,
   setShowSidebar,
   onSave,
@@ -27,7 +28,7 @@ export default function Header({
           <div className={`bg-gradient-to-br ${currentTheme.accent} p-2 rounded-lg`}>
             <Code className="text-white" size={20} />
           </div>
-          <h1 className={`${currentTheme.text} truncate text-lg font-bold sm:text-xl`}>HyperCode</h1>
+          <h1 className={`${currentTheme.text} truncate text-lg font-bold sm:text-xl`}>TriCo</h1>
           
         </div>
         <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
@@ -44,6 +45,15 @@ export default function Header({
           >
             <Settings size={16} />
             <span className="hidden sm:inline">Settings</span>
+          </button>
+          <button
+            onClick={() => setShowInfo(true)}
+            className={`flex items-center gap-2 ${currentTheme.secondary} hover:${currentTheme.bg} ${currentTheme.text} border ${currentTheme.border} px-2.5 py-2.5 sm:px-4 rounded-xl transition-all font-medium`}
+            aria-label="Open TriCo guide"
+            title="How to use TriCo"
+          >
+            <Info size={16} />
+            <span className="hidden sm:inline">Info</span>
           </button>
           <button
             onClick={() => setShowPreview(!showPreview)}

@@ -33,3 +33,9 @@ export const fontFamilies = {
   sans: 'font-sans',
   serif: 'font-serif'
 };
+
+export const editorThemes = {
+  dracula: 'Dracula',
+  oneDark: 'One Dark',
+  light: 'Light'
+};

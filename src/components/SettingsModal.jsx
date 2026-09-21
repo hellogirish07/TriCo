@@ -7,7 +7,8 @@ export default function SettingsModal({
   setSettings, 
   currentTheme, 
   fontFamilies, 
-  themes 
+  themes,
+  editorThemes
 }) {
   if (!showSettings) return null;
 
@@ -42,6 +43,7 @@ export default function SettingsModal({
               <span className={`text-xs ${currentTheme.textSecondary}`}>10px</span>
               <span className={`text-xs ${currentTheme.textSecondary}`}>50px</span>
             </div>
+            <p className={`mt-2 text-xs ${currentTheme.textSecondary}`}>Hold Ctrl/Cmd and scroll over the editor to adjust.</p>
           </div>
 
           {/* Font Family */}
@@ -86,6 +88,53 @@ export default function SettingsModal({
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Editor Theme */}
+          <div>
+            <label className={`block ${currentTheme.text} font-semibold mb-3`}>
+              Editor Theme
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              {Object.entries(editorThemes).map(([theme, label]) => (
+                <button
+                  key={theme}
+                  onClick={() => setSettings({...settings, editorTheme: theme})}
+                  className={`py-2.5 rounded-lg font-medium transition-all ${
+                    settings.editorTheme === theme
+                      ? `bg-gradient-to-r ${currentTheme.accent} text-white shadow-lg`
+                      : `${currentTheme.input} ${currentTheme.text} border`
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <p className={`mt-2 text-xs ${currentTheme.textSecondary}`}>Changes the code editor only.</p>
+          </div>
+
+          {/* Word Wrap */}
+          <div className="flex items-center justify-between">
+            <div>
+              <label className={`${currentTheme.text} font-semibold`}>
+                Word Wrap
+              </label>
+              <p className={`mt-1 text-xs ${currentTheme.textSecondary}`}>Wrap long lines inside the editor.</p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={settings.wordWrap}
+              aria-label="Toggle word wrap"
+              onClick={() => setSettings({...settings, wordWrap: !settings.wordWrap})}
+              className={`relative h-6 w-12 rounded-full transition-colors ${
+                settings.wordWrap ? 'bg-green-500' : `${currentTheme.input}`
+              }`}
+            >
+              <div className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
+                settings.wordWrap ? 'translate-x-6' : 'translate-x-0'
+              }`} />
+            </button>
           </div>
 
           {/* Auto Run */}

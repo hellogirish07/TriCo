@@ -1,6 +1,6 @@
-# HyperCode
+# TriCo
 
-HyperCode is a VS Code-inspired browser workspace for opening, editing, and managing real project folders directly in the browser. It combines a file explorer, tabbed editor, live preview, project save flow, and responsive layout in a single modern interface.
+TriCo is a VS Code-inspired browser workspace for opening, editing, and managing real project folders directly in the browser. It combines a file explorer, tabbed editor, live preview, project save flow, and responsive layout in a single modern interface.
 
 ## ✨ Latest Updates
 
@@ -8,6 +8,7 @@ HyperCode is a VS Code-inspired browser workspace for opening, editing, and mana
 - Open a real project folder from your machine
 - Browse nested files and folders in a sidebar explorer
 - Create, rename, and delete files directly from the UI
+- Use the three-dot menu on any file for rename and delete actions
 - See the current file tree update immediately as your workspace changes
 
 ### File-based editor workflow
