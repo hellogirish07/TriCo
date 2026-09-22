@@ -23,8 +23,8 @@ export default function CodeEditor({ file, onChange, settings, currentTheme, onA
   const [showSymbols, setShowSymbols] = useState(() => window.innerWidth >= 768);
   const value = file?.content || '';
 
-  const handleChange = (event) => {
-    onChange(event.target.value);
+  const handleChange = (nextValue) => {
+    onChange(nextValue);
     if (settings.autoRun && onAutoRun) onAutoRun();
   };
 
