@@ -14,7 +14,7 @@ export default function InfoModal({ showInfo, setShowInfo, currentTheme }) {
 
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
-      <div className={`max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl border ${currentTheme.border} ${currentTheme.secondary} shadow-2xl`}>
+      <div className={`max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-2xl border ${currentTheme.border} ${currentTheme.secondary} shadow-2xl`}>
         <div className={`sticky top-0 flex items-center justify-between border-b ${currentTheme.border} ${currentTheme.secondary} px-5 py-4 sm:px-6`}>
           <div className="flex items-center gap-3">
             <div className="rounded-lg bg-blue-600/20 p-2 text-blue-400">
