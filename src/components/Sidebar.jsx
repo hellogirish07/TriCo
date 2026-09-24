@@ -137,6 +137,7 @@ export default function Sidebar({ files, selectedFile, onSelectFile, onCreateFil
 
       <div className={`border-t ${currentTheme.border} px-4 py-3`}>
         <div className={`text-xs ${currentTheme.textSecondary}`}>Files update as you edit.</div>
+        <div className={`text-xs ${currentTheme.textSecondary}`}>TriCo v2.2.1</div>
       </div>
     </div>
   );
