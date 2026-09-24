@@ -46,7 +46,7 @@ export default function SettingsModal({
               max="50"
               value={settings.fontSize}
               onChange={(e) => setSettings({...settings, fontSize: e.target.value})}
-              className="w-full accent-blue-500"
+              className="w-full accent-[#1e46a1] h-2 rounded-lg cursor-pointer"
             />
             <div className="flex justify-between mt-1">
               <span className={`text-xs ${currentTheme.textSecondary}`}>10px</span>
@@ -56,70 +56,57 @@ export default function SettingsModal({
           </div>
 
           {/* Font Family */}
-          <div>
-            <label className={`block ${currentTheme.text} font-semibold mb-3`}>
+          <div className="flex items-center justify-between gap-4">
+            <label className={`${currentTheme.text} font-semibold`}>
               Font Family
             </label>
-            <div className="grid grid-cols-3 gap-2">
-              {Object.keys(fontFamilies).map(font => (
-                <button
-                  key={font}
-                  onClick={() => setSettings({...settings, fontFamily: font})}
-                  className={`py-2.5 rounded-lg font-medium transition-all capitalize ${
-                    settings.fontFamily === font
-                      ? `bg-gradient-to-r ${currentTheme.accent} text-white shadow-lg`
-                      : `${currentTheme.input} ${currentTheme.text} border`
-                  }`}
-                >
-                  {font}
-                </button>
+            <select
+              value={settings.fontFamily}
+              onChange={(e) => setSettings({ ...settings, fontFamily: e.target.value })}
+              className={`w-36 rounded-lg border ${currentTheme.border} ${currentTheme.input} px-2 py-1.5 text-sm outline-none focus:border-blue-500`}
+            >
+              {Object.keys(fontFamilies).map((font) => (
+                <option key={font} value={font} className="bg-slate-900 text-slate-100">
+                  {font.charAt(0).toUpperCase() + font.slice(1)}
+                </option>
               ))}
-            </div>
+            </select>
           </div>
 
           {/* Theme */}
-          <div>
-            <label className={`block ${currentTheme.text} font-semibold mb-3`}>
+          <div className="flex items-center justify-between gap-4">
+            <label className={`${currentTheme.text} font-semibold`}>
               Theme
             </label>
-            <div className="grid grid-cols-3 gap-2">
-              {Object.keys(themes).map(theme => (
-                <button
-                  key={theme}
-                  onClick={() => setSettings({...settings, theme})}
-                  className={`py-2.5 rounded-lg font-medium transition-all capitalize ${
-                    settings.theme === theme
-                      ? `bg-gradient-to-r ${themes[theme].accent} text-white shadow-lg`
-                      : `${currentTheme.input} ${currentTheme.text} border`
-                  }`}
-                >
-                  {theme}
-                </button>
+            <select
+              value={settings.theme}
+              onChange={(e) => setSettings({ ...settings, theme: e.target.value })}
+              className={`w-36 rounded-lg border ${currentTheme.border} ${currentTheme.input} px-2 py-1.5 text-sm outline-none focus:border-blue-500`}
+            >
+              {Object.keys(themes).map((theme) => (
+                <option key={theme} value={theme} className="bg-slate-900 text-slate-100">
+                  {theme.charAt(0).toUpperCase() + theme.slice(1)}
+                </option>
               ))}
-            </div>
+            </select>
           </div>
 
           {/* Editor Theme */}
-          <div>
-            <label className={`block ${currentTheme.text} font-semibold mb-3`}>
+          <div className="flex items-center justify-between gap-4">
+            <label className={`${currentTheme.text} font-semibold`}>
               Editor Theme
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <select
+              value={settings.editorTheme}
+              onChange={(e) => setSettings({ ...settings, editorTheme: e.target.value })}
+              className={`w-36 rounded-lg border ${currentTheme.border} ${currentTheme.input} px-2 py-1.5 text-sm outline-none focus:border-blue-500`}
+            >
               {Object.entries(editorThemes).map(([theme, label]) => (
-                <button
-                  key={theme}
-                  onClick={() => setSettings({...settings, editorTheme: theme})}
-                  className={`py-2.5 rounded-lg font-medium transition-all ${
-                    settings.editorTheme === theme
-                      ? `bg-gradient-to-r ${currentTheme.accent} text-white shadow-lg`
-                      : `${currentTheme.input} ${currentTheme.text} border`
-                  }`}
-                >
+                <option key={theme} value={theme} className="bg-slate-900 text-slate-100">
                   {label}
-                </button>
+                </option>
               ))}
-            </div>
-            <p className={`mt-2 text-xs ${currentTheme.textSecondary}`}>Changes the code editor only.</p>
+            </select>
           </div>
 
           {/* Word Wrap */}
@@ -137,7 +124,7 @@ export default function SettingsModal({
               aria-label="Toggle word wrap"
               onClick={() => setSettings({...settings, wordWrap: !settings.wordWrap})}
               className={`relative h-6 w-12 rounded-full transition-colors ${
-                settings.wordWrap ? 'bg-green-500' : `${currentTheme.input}`
+                settings.wordWrap ? 'bg-[#1e46a1]' : `${currentTheme.input}`
               }`}
             >
               <div className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white transition-transform ${
@@ -154,7 +141,7 @@ export default function SettingsModal({
             <button
               onClick={() => setSettings({...settings, autoRun: !settings.autoRun})}
               className={`relative w-12 h-6 rounded-full transition-colors ${
-                settings.autoRun ? 'bg-green-500' : `${currentTheme.input}`
+                settings.autoRun ? 'bg-[#1e46a1]' : `${currentTheme.input}`
               }`}
             >
               <div className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full transition-transform ${

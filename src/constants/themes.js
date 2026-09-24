@@ -8,6 +8,7 @@ export const themes = {
     input: 'bg-slate-800 border-slate-700 text-slate-100',
     accent: 'from-blue-600 to-purple-600'
   },
+
   light: {
     bg: 'bg-gray-50',
     secondary: 'bg-white',
@@ -17,6 +18,7 @@ export const themes = {
     input: 'bg-white border-gray-300 text-gray-900',
     accent: 'from-blue-500 to-purple-500'
   },
+
   ocean: {
     bg: 'bg-cyan-950',
     secondary: 'bg-cyan-900',
@@ -25,6 +27,17 @@ export const themes = {
     textSecondary: 'text-cyan-300',
     input: 'bg-cyan-800 border-cyan-700 text-cyan-50',
     accent: 'from-cyan-500 to-teal-500'
+  },
+
+  darkGray: {
+    bg: 'bg-[#272822]',
+    secondary: 'bg-[#2f3129]',
+    border: 'border-[#3a3d35]',
+    text: 'text-[#f8f8f2]',
+    textSecondary: 'text-[#8f9089]',
+    input: 'bg-[#1f201b] border-[#3a3d35] text-[#f8f8f2]',
+    // accent: 'from-[#75715e] to-[#a6e22e]'
+    accent: 'from-blue-600 to-purple-600'
   }
 };
 
@@ -36,6 +49,7 @@ export const fontFamilies = {
 
 export const editorThemes = {
   dracula: 'Dracula',
+  monokai: 'Monokai',
   oneDark: 'One Dark',
   light: 'Light'
 };

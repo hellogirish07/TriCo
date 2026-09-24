@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Zap } from 'lucide-react';
 import CodeMirror from '@uiw/react-codemirror';
 import { dracula } from '@uiw/codemirror-theme-dracula';
+import { monokai } from '@uiw/codemirror-theme-monokai';
 import { oneDark } from '@codemirror/theme-one-dark';
 import { EditorView } from '@codemirror/view';
 import { html } from '@codemirror/lang-html';
@@ -15,7 +16,7 @@ const placeholders = {
   js: 'Enter JavaScript here...',
 };
 
-const editorThemeExtensions = { dracula, oneDark, light: 'light' };
+const editorThemeExtensions = { dracula, monokai, oneDark, light: 'light' };
 
 export default function CodeEditor({ file, onChange, settings, currentTheme, onAutoRun, onFontSizeChange }) {
   const editorViewRef = useRef(null);

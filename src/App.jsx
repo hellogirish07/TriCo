@@ -42,8 +42,30 @@ const getFileType = (fileName) => {
 
 const getFileName = (filePath) => filePath.split('/').pop();
 const WORKSPACE_STORAGE_KEY = 'trico-workspace';
+const SETTINGS_STORAGE_KEY = 'trico-settings';
 const LEGACY_WORKSPACE_STORAGE_KEYS = ['hypercode-workspace', 'codepen-mini-workspace'];
 const supportedFilePattern = /\.(html?|css|js)$/i;
+
+const defaultSettings = {
+  fontSize: '20',
+  fontFamily: 'mono',
+  theme: 'dark',
+  editorTheme: 'dracula',
+  wordWrap: false,
+  autoRun: false,
+};
+
+const loadSavedSettings = () => {
+  try {
+    const savedSettings = JSON.parse(localStorage.getItem(SETTINGS_STORAGE_KEY) || 'null');
+    if (savedSettings && typeof savedSettings === 'object') {
+      return { ...defaultSettings, ...savedSettings };
+    }
+  } catch {
+    return defaultSettings;
+  }
+  return defaultSettings;
+};
 
 const loadSavedFiles = () => {
   try {
@@ -94,14 +116,7 @@ export default function App() {
   const diskPathsRef = useRef([]);
   const openProjectFolderRef = useRef(null);
 
-  const [settings, setSettings] = useState({
-    fontSize: '20',
-    fontFamily: 'mono',
-    theme: 'dark',
-    editorTheme: 'dracula',
-    wordWrap: false,
-    autoRun: false,
-  });
+  const [settings, setSettings] = useState(loadSavedSettings);
 
   const currentTheme = themes[settings.theme];
   const currentFile = files.find((file) => file.path === selectedFile) || null;
@@ -114,6 +129,14 @@ export default function App() {
       return;
     }
   }, [files]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify(settings));
+    } catch {
+      return;
+    }
+  }, [settings]);
 
   useEffect(() => {
     const confirmExit = (event) => {
