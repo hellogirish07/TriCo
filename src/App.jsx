@@ -49,7 +49,7 @@ const supportedFilePattern = /\.(html?|css|js)$/i;
 const defaultSettings = {
   fontSize: '20',
   fontFamily: 'mono',
-  theme: 'dark',
+  theme: 'midnight',
   editorTheme: 'dracula',
   wordWrap: false,
   autoRun: false,
@@ -118,7 +118,7 @@ export default function App() {
 
   const [settings, setSettings] = useState(loadSavedSettings);
 
-  const currentTheme = themes[settings.theme];
+  const currentTheme = themes[settings.theme] || themes.midnight;
   const currentFile = files.find((file) => file.path === selectedFile) || null;
   const openFiles = openTabs.map((path) => files.find((file) => file.path === path)).filter(Boolean);
 

@@ -1,5 +1,5 @@
 export const themes = {
-  dark: {
+  midnight: {
     bg: 'bg-slate-950',
     secondary: 'bg-slate-900',
     border: 'border-slate-800',
@@ -37,6 +37,16 @@ export const themes = {
     textSecondary: 'text-[#8f9089]',
     input: 'bg-[#1f201b] border-[#3a3d35] text-[#f8f8f2]',
     // accent: 'from-[#75715e] to-[#a6e22e]'
+    accent: 'from-blue-600 to-purple-600'
+  },
+
+  dark: {
+    bg: 'bg-[#1c1c1e]',
+    secondary: 'bg-[#1c1c1e]',
+    border: 'border-[#3a3a3c]',
+    text: 'text-[#f2f2f7]',
+    textSecondary: 'text-[#8e8e93]',
+    input: 'bg-[#2c2c2e] border-[#3a3a3c] text-[#f2f2f7]',
     accent: 'from-blue-600 to-purple-600'
   }
 };
